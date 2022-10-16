@@ -70,11 +70,12 @@ const upload = multer({
             cb(null, '../files/' + req.body.userName)
         },
         filename: function (req, file, cb) {
-            console.log('file name: ' + file.originalname)
-            console.log('file save path: ' + req.body.userName + '/' + file.originalname)
-            console.log('file upload time: ' + req.body.uploadTime)
             const { fieldname, originalname, encoding, mimetype } = file
             cb(null, originalname);
+
+            console.log('File name: ' + originalname)
+            console.log('File save path: ' + req.body.userName + '/' + originalname)
+            console.log('File upload time: ' + req.body.uploadTime)
         }
     })
 })

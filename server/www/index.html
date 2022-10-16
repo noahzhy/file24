@@ -6,49 +6,57 @@
 </head>
 <body>
     <h1>Keep file for me</h1>
-    <h2>Upload a file</h2>
-    <p>Upload a file and we'll keep it for 24 hours.</p>
-    <div class="container">
-        <input type="file" id="file" multiple="multiple" />
-        <input type="button" id="btnUpload" value="Upload" onclick="uploadFiles()" />
-    </div>
+    <h2>For New</h2>
 
-    <h2>User Name</h2>
+    <h3>Step 1, Nick Name</h3>
+    <p>Enter your nick name, or remember this</p>
+    <input type="text" id="username" />
+
+    <h3>Step 2, Upload files</h3>
+    <p>Files will be deleted after 24 hours</p>
+    <input type="file" id="inputfile" multiple="multiple" />
+
+    <h2>For Old</h2>
     <p>Enter your name to view your files.</p>
-    <input type="text" id="username" onkeypress="if(event.keyCode==13) {toUserName()}"/>
-    <input type="submit" value="Go" onclick="toUserName()"/>
+    <input type="text" id="userspace" onkeypress="if(event.keyCode==13) {toUserSpace()}"/>
+    <input type="submit" value="Go" onclick="toUserSpace()"/>
 
-    <script type="text/javascript">
-        var toUserName = function (data) {
-            document.location.href = $('#username').val();
+    <script>
+        const usernameInput = document.querySelector('#username');
+        usernameInput.placeholder = "tim";
+
+        const toUserSpace = function (data) {
+            document.location.href = $('#userspace').val();
         };
-        // upload files via FileReader
-        var uploadFiles = function () {
-            var files = document.getElementById('file').files;
-            for (var i = 0; i < files.length; i++) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var data = e.target.result;
-                    $.ajax({
-                        url: 'upload',
-                        type: 'POST',
-                        data: data,
-                        processData: false,
-                        contentType: false,
-                        success: function (data) {
-                            // alert('Upload success!');
-                        },
-                        error: function (data) {
-                            alert('Upload failed!');
-                        }
-                    });
-                };
-                reader.readAsArrayBuffer(files[i]);
+
+        const fileInput = document.querySelector('#inputfile');
+        fileInput.onchange = (e) => {
+            const body = new FormData();
+            var userName = usernameInput.value;
+            console.log(userName);
+            if (userName == "") {
+                userName = usernameInput.placeholder;
             }
+            body.append('userName', userName);
+            body.append('uploadTime', new Date().toLocaleString());
+            for (let i = 0; i < e.target.files.length; i++) {
+                body.append('file', e.target.files[i]);
+            }
+            upload(body);
             // clear file input
-            $('#file').val('');
-            // document.location.href = $('#username').val();
+            alert('Upload Successfully!');
+            $('#inputfile').val('');
+            // to specific page
+            document.location.href = userName;
         };
+        async function upload(data) {
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: data,
+            });
+            console.log(response);
+        }
+
     </script>
 </body>
 </html>
