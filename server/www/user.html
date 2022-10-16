@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Keep file for me</title>
+</head>
+
+<body>
+  <h1>> {{username}}</h1>
+  <table>
+    <thead>
+      <tr class="header" id="theader">
+        <th>Files</th>
+        <th>Upload Time</th>
+        <th>Operations</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+      {{each files}}
+      <tr>
+        <td>
+          <a href="{{username}}/{{$value.name}}">{{$value.name}}</a>
+        </td>
+        <td>{{$value.uploadTime}}</td>
+        <td>
+          <a>Extension</a>
+          <a href="{{username}}/{{$value.name}}">Download</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</body>
+
+</html>

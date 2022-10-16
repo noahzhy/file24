@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "art-template": "^4.13.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}

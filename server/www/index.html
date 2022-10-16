@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Keep file for me</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Keep file for me</h1>
+    <h2>Upload a file</h2>
+    <p>Upload a file and we'll keep it for 24 hours.</p>
+    <div class="container">
+        <input type="file" id="file" multiple="multiple" />
+        <input type="button" id="btnUpload" value="Upload" onclick="uploadFiles()" />
+    </div>
+
+    <h2>User Name</h2>
+    <p>Enter your name to view your files.</p>
+    <input type="text" id="username" onkeypress="if(event.keyCode==13) {toUserName()}"/>
+    <input type="submit" value="Go" onclick="toUserName()"/>
+
+    <script type="text/javascript">
+        var toUserName = function (data) {
+            document.location.href = $('#username').val();
+        };
+        // upload files via FileReader
+        var uploadFiles = function () {
+            var files = document.getElementById('file').files;
+            for (var i = 0; i < files.length; i++) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var data = e.target.result;
+                    $.ajax({
+                        url: 'upload',
+                        type: 'POST',
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            // alert('Upload success!');
+                        },
+                        error: function (data) {
+                            alert('Upload failed!');
+                        }
+                    });
+                };
+                reader.readAsArrayBuffer(files[i]);
+            }
+            // clear file input
+            $('#file').val('');
+            // document.location.href = $('#username').val();
+        };
+    </script>
+</body>
+</html>
