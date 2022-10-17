@@ -28,7 +28,7 @@ DB.initDB.prototype.deleteWhereUserName = function deleteWhereUserName(userName)
 }
 
 DB.initDB.prototype.queryViaUserName = function queryViaUserName(userName, callback) {
-    DB.db.prepare("select filePath, uploadTime from files where userName = ?").all(userName,
+    DB.db.prepare("select filePath, uploadTime from files where userName = ? ORDER BY uploadTime DESC").all(userName,
         function (err, rows) {
             if (err) {
                 console.log(err);
