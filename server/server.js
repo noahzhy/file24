@@ -21,18 +21,17 @@ schedule.scheduleJob(rule, function () {
 });
 
 
-// delete empty dir under given dir
+// delete empty dir under given dir except root dir
 function deleteEmptyDir(dir) {
     let files = fs.readdirSync(dir);
-    if (files.length === 0) {
-        fs.rmdirSync(dir);
-        return;
-    }
     files.forEach(function (file) {
         let filePath = path.join(dir, file);
         let stat = fs.statSync(filePath);
         if (stat.isDirectory()) {
             deleteEmptyDir(filePath);
+            if (fs.readdirSync(filePath).length === 0) {
+                fs.rmdirSync(filePath);
+            }
         }
     });
 }

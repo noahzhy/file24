@@ -15,7 +15,8 @@ DB.initDB = function () {
 }
 
 DB.initDB.prototype.insertFile = function insertFile(userName, filePath) {
-    DB.db.prepare("insert into files values (?, ?, datetime('now'))").run(userName, filePath);
+    // insert record into db on conflict replace
+    DB.db.prepare("insert or replace into files values (?, ?, datetime('now'))").run(userName, filePath);
 }
 
 DB.initDB.prototype.deleteAll = function deleteAll() {
