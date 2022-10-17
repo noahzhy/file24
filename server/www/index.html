@@ -11,21 +11,33 @@
 
     <h3>🔮Step 1, Set a Nick Name</h3>
     <p>Enter your nick name, or remember this</p>
-    <input type="text" id="username" />
+    <b>File24.me</b>/<input type="text"
+        id="username"
+        maxlength="20"
+        onkeyup="this.value=this.value.replace(/[^a-z0-9_]/g,'');"/>
+    <button id="btn_genId" onclick="GenId()">🔄</button>
 
     <h3>📤Step 2, Upload Files</h3>
     <p>Files will be deleted after 24 hours</p>
     <input type="file" id="inputfile" multiple="multiple" />
 
     <h2>= For Old =</h2>
-    <p>Enter your name to view your files.</p>
-    <input type="text" id="userspace" onkeypress="if(event.keyCode==13) {toUserSpace()}"/>
+    <p>Enter your nick name to view your files</p>
+    <b>File24.me</b>/<input type="text" id="userspace" onkeypress="if(event.keyCode==13) {toUserSpace()}"/>
     <input type="submit" value="Go🚀" onclick="toUserSpace()"/>
 
     <script>
         const usernameInput = document.querySelector('#username');
         // random name
-        usernameInput.placeholder = "tim";
+        const GenId = function () {
+            var text = "";
+            var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < 4; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            usernameInput.placeholder = text;
+            return text;
+        }
+        GenId();
 
         const toUserSpace = function (data) {
             document.location.href = $('#userspace').val();
