@@ -19,12 +19,12 @@
       {{each files}}
       <tr>
         <td>
-          <a href="{{username}}/{{$value.name}}">{{$value.name}}</a>
+          <a href="{{username}}/{{$value.filePath}}">{{$value.filePath}}</a>
         </td>
-        <td>{{$value.uploadTime}}</td>
+        <td>{{$value.timeLeft}}</td>
         <td>
-          <a>Extension</a>
-          <a href="{{username}}/{{$value.name}}">Download</a>
+          <!-- <a>Extension</a> -->
+          <a href="{{username}}/{{$value.filePath}}">Download</a>
         </td>
       </tr>
       {{/each}}

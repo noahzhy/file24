@@ -3,8 +3,20 @@ const http = require('http');
 const path = require('path');
 const multer = require('multer');
 const template = require('art-template');
+const schedule = require('node-schedule');
+
+const DB = require('./db.js').DB;
+const db = new DB();
 
 const server = http.createServer();
+
+let rule = new schedule.RecurrenceRule();
+rule.second = 0;
+// execute each minute
+schedule.scheduleJob(rule, function () {
+    db.deleteOlderThanOneDay();
+    console.log('clean up >> ' + new Date().toLocaleString());
+});
 
 
 // mkdir
@@ -53,14 +65,14 @@ function toPage(res, page, data) {
 
 // to user page
 function toUserPage(res, username) {
-    const filePath = '../files/' + username
     // to user page
-    const files = fs.readdirSync(filePath)
-    const data = {
-        username: username,
-        files: addUploadTime(files),
-    }
-    toPage(res, 'user.html', data)
+    db.queryViaUserName(username, function (rows) {
+        let data = {
+            username: username,
+            files: rows,
+        }
+        toPage(res, 'user.html', data)
+    })
 }
 
 const upload = multer({
@@ -73,9 +85,10 @@ const upload = multer({
             const { fieldname, originalname, encoding, mimetype } = file
             cb(null, originalname);
 
-            console.log('File name: ' + originalname)
             console.log('File save path: ' + req.body.userName + '/' + originalname)
             console.log('File upload time: ' + req.body.uploadTime)
+
+            db.insertFile(req.body.userName, req.body.userName + '/' + originalname)
         }
     })
 })
