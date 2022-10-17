@@ -6,18 +6,36 @@ const template = require('art-template');
 const schedule = require('node-schedule');
 
 const DB = require('./db.js').DB;
+
 const db = new DB();
-
 const server = http.createServer();
+const filesRootPath = '../files';
 
+// execute each minute
 let rule = new schedule.RecurrenceRule();
 rule.second = 0;
-// execute each minute
 schedule.scheduleJob(rule, function () {
     db.deleteOlderThanOneDay();
+    deleteEmptyDir(filesRootPath);
     console.log('clean up >> ' + new Date().toLocaleString());
 });
 
+
+// delete empty dir under given dir
+function deleteEmptyDir(dir) {
+    let files = fs.readdirSync(dir);
+    if (files.length === 0) {
+        fs.rmdirSync(dir);
+        return;
+    }
+    files.forEach(function (file) {
+        let filePath = path.join(dir, file);
+        let stat = fs.statSync(filePath);
+        if (stat.isDirectory()) {
+            deleteEmptyDir(filePath);
+        }
+    });
+}
 
 // mkdir
 function mkdir(path) {
@@ -34,18 +52,6 @@ function isFile(path) {
 // is dir
 function isDir(path) {
     return fs.existsSync(path) && fs.statSync(path).isDirectory()
-}
-
-// add upload time to the file in files and return dict
-function addUploadTime(files) {
-    let dict = {}
-    for (let file of files) {
-        let subDict = {}
-        subDict['name'] = file
-        subDict['uploadTime'] = new Date().toLocaleString()
-        dict[file] = subDict
-    }
-    return dict
 }
 
 // download file
