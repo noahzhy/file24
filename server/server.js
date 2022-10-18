@@ -55,12 +55,13 @@ function isDir(path) {
 }
 
 // download file
-function downloadFile(res, path) {
-    let data = fs.readFileSync(path)
-    let filename = path.split('\/').pop()
-    res.setHeader('Content-Type', 'application/octet-stream')
-    res.setHeader('Content-Disposition', 'attachment; filename=' + encodeURIComponent(filename))
-    res.end(data)
+function downloadFile(res, filePath) {
+    let filename = path.basename(filePath);
+    res.writeHead(200, {
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': 'attachment; filename=' + encodeURI(filename),
+    });
+    fs.createReadStream(filePath).pipe(res);
 }
 
 // to specify page
