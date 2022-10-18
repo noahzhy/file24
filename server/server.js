@@ -83,8 +83,8 @@ function toUserPage(res, username) {
 
 const upload = multer({
     limits: {
-        // 1MB
-        fileSize: 1 * 1024 * 1024
+        // 100MB
+        fileSize: 100 * 1024 * 1024
     },
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
@@ -124,6 +124,7 @@ server.on('request', (req, res) => {
 
     } else if (url === '/test.html') {
         // to test.html
+        db.deleteAll()
         toPage(res, 'test.html', {})
 
     } else {
