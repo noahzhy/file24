@@ -9,14 +9,15 @@ const DB = require('./db.js').DB;
 
 const db = new DB();
 const server = http.createServer();
-const filesRootPath = '../files';
+const filesRootPath = '../files/';
 
 // execute each minute
 let rule = new schedule.RecurrenceRule();
-rule.second = 0;
+rule.second = 30;
 schedule.scheduleJob(rule, function () {
-    db.deleteOlderThanOneDay();
-    deleteEmptyDir(filesRootPath);
+    db.deleteOlderThanOneDay(function () {
+        deleteEmptyDir(filesRootPath);
+    });
     console.log('clean up >> ' + new Date().toLocaleString());
 });
 
@@ -83,17 +84,18 @@ function toUserPage(res, username) {
 const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
-            mkdir('../files/' + req.body.userName)
-            cb(null, '../files/' + req.body.userName)
+            mkdir(filesRootPath + req.body.userName)
+            cb(null, filesRootPath + req.body.userName)
         },
         filename: function (req, file, cb) {
             const { fieldname, originalname, encoding, mimetype } = file
-            cb(null, originalname);
+            const utf8Name = Buffer.from(originalname, "latin1").toString("utf8")
+            cb(null, utf8Name);
 
-            console.log('File save path: ' + req.body.userName + '/' + originalname)
+            console.log('File save path: ' + req.body.userName + '/' + utf8Name)
             console.log('File upload time: ' + req.body.uploadTime)
 
-            db.insertFile(req.body.userName, req.body.userName + '/' + originalname)
+            db.insertFile(req.body.userName, req.body.userName + '/' + utf8Name)
         }
     })
 })

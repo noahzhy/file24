@@ -22,7 +22,8 @@
     <input type="file" id="inputfile" multiple="multiple" />
 
     <h2>= For Old =</h2>
-    <p>Enter your nick name to view your files</p>
+    <p>Enter your nick name to view your files</br>
+        Or enter it (file24.me/your name) in URL bar</p>
     <b>File24.me</b>/<input type="text" id="userspace" onkeypress="if(event.keyCode==13) {toUserSpace()}"/>
     <input type="submit" value="Go🚀" onclick="toUserSpace()"/>
 
@@ -35,7 +36,6 @@
             for (var i = 0; i < 4; i++)
                 text += possible.charAt(Math.floor(Math.random() * possible.length));
             usernameInput.placeholder = text;
-            return text;
         }
         GenId();
 

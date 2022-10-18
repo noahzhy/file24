@@ -67,7 +67,7 @@ DB.initDB.prototype.cleanUpViaUserName = function cleanUpViaUserName(userName) {
     );
 }
 
-DB.initDB.prototype.deleteOlderThanOneDay = function deleteOlderThanOneDay() {
+DB.initDB.prototype.deleteOlderThanOneDay = function deleteOlderThanOneDay(callback) {
     DB.db.prepare("select * from files where uploadTime < datetime('now', '-1 day')").all(
         function (err, rows) {
             if (err) {
@@ -85,6 +85,7 @@ DB.initDB.prototype.deleteOlderThanOneDay = function deleteOlderThanOneDay() {
                     }
                 });
             });
+            callback();
         }
     );
 }
