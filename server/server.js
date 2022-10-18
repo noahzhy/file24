@@ -82,6 +82,10 @@ function toUserPage(res, username) {
 }
 
 const upload = multer({
+    limits: {
+        // 100MB
+        fileSize: 100 * 1024 * 1024
+    },
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
             mkdir(filesRootPath + req.body.userName)

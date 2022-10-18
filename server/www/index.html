@@ -57,18 +57,18 @@
                 body.append('file', e.target.files[i]);
             }
             upload(body);
-            // clear file input
-            alert('Upload Successfully!');
-            $('#inputfile').val('');
-            // to specific page
-            document.location.href = userName;
         };
         async function upload(data) {
             const response = await fetch('/upload', {
                 method: 'POST',
                 body: data,
             });
+            // clear file input
+            alert('Upload Successfully!');
+            $('#inputfile').val('');
             console.log(response);
+            // to specific page
+            document.location.href = userName;
         }
 
     </script>
