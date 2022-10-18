@@ -57,9 +57,9 @@ function isDir(path) {
 // download file
 function downloadFile(res, path) {
     let data = fs.readFileSync(path)
-    res.setHeader('Content-Type', 'application/octet-stream')
     let filename = path.split('\/').pop()
-    res.setHeader('Content-Disposition', 'attachment; filename=' + filename)
+    res.setHeader('Content-Type', 'application/octet-stream')
+    res.setHeader('Content-Disposition', 'attachment; filename=' + encodeURIComponent(filename))
     res.end(data)
 }
 
@@ -127,8 +127,11 @@ server.on('request', (req, res) => {
         toPage(res, 'test.html', {})
 
     } else {
+        // to utf8 file name
+        let path = decodeURI(url)
         // replace %20 to space
-        const filePath = '../files' + url.replace(/%20/g, ' ')
+        const filePath = '../files' + path.replace(/%20/g, ' ')
+        console.log('File download path: ' + filePath)
 
         if (isFile(filePath)) {
             // download file
