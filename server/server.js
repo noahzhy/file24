@@ -83,8 +83,8 @@ function toUserPage(res, username) {
 
 const upload = multer({
     limits: {
-        // 100MB
-        fileSize: 100 * 1024 * 1024
+        // 1MB
+        fileSize: 1 * 1024 * 1024
     },
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
@@ -113,7 +113,7 @@ server.on('request', (req, res) => {
         upload.array('file')(req, res, function (err) {
             if (err) {
                 console.log(err)
-                return
+                return res.end('Upload failed')
             }
         })
         res.end('upload success')
@@ -127,7 +127,8 @@ server.on('request', (req, res) => {
         toPage(res, 'test.html', {})
 
     } else {
-        const filePath = '../files' + url
+        // replace %20 to space
+        const filePath = '../files' + url.replace(/%20/g, ' ')
 
         if (isFile(filePath)) {
             // download file
@@ -135,7 +136,7 @@ server.on('request', (req, res) => {
 
         } else if (isDir(filePath)) {
             // todo: check username in db or not
-            toUserPage(res, url.split('\/').pop())
+            toUserPage(res, filePath.split('\/').pop())
 
         } else {
             toPage(res, '404.html', {})
