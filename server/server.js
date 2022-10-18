@@ -116,6 +116,7 @@ server.on('request', (req, res) => {
                 return
             }
         })
+        res.end('upload success')
 
     } else if (url === '/' || url === '/index.html') {
         // to index.html

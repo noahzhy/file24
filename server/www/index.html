@@ -28,6 +28,7 @@
     <input type="submit" value="Go🚀" onclick="toUserSpace()"/>
 
     <script>
+        var userName = "";
         const usernameInput = document.querySelector('#username');
         // random name
         const GenId = function () {
@@ -46,8 +47,7 @@
         const fileInput = document.querySelector('#inputfile');
         fileInput.onchange = (e) => {
             const body = new FormData();
-            var userName = usernameInput.value;
-            console.log(userName);
+            userName = usernameInput.value;
             if (userName == "") {
                 userName = usernameInput.placeholder;
             }
@@ -56,20 +56,21 @@
             for (let i = 0; i < e.target.files.length; i++) {
                 body.append('file', e.target.files[i]);
             }
-            upload(body);
+            upload(body).then((data) => {
+                // clear file input
+                alert('Upload Successfully!');
+                $('#inputfile').val('');
+                // to specific page
+                document.location.href = userName;
+            });
         };
         async function upload(data) {
             const response = await fetch('/upload', {
                 method: 'POST',
                 body: data,
             });
-            // clear file input
-            alert('Upload Successfully!');
-            $('#inputfile').val('');
-            console.log(response);
-            // to specific page
-            document.location.href = userName;
-        }
+            return response;
+        };
 
     </script>
 </body>
