@@ -65,20 +65,23 @@
             });
         };
 
-        // post large file to server via stream
+        // upload large file via slice
         const upload = (body) => {
             return new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', '/upload');
-                xhr.onload = () => {
-                    if (xhr.status === 200) {
-                        resolve(xhr.response);
-                    } else {
-                        reject(xhr.statusText);
+                $.ajax({
+                    url: '/upload',
+                    type: 'POST',
+                    data: body,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (err) {
+                        reject(err);
                     }
-                };
-                xhr.onerror = () => reject(xhr.statusText);
-                xhr.send(body);
+                });
             });
         };
 

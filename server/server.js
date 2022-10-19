@@ -85,7 +85,7 @@ function toUserPage(res, username) {
 const upload = multer({
     limits: {
         // 100MB
-        fileSize: 100 * 1024 * 1024
+        fileSize: 100 * 1024 * 1024,
     },
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
@@ -129,10 +129,8 @@ server.on('request', (req, res) => {
         toPage(res, 'test.html', {})
 
     } else {
-        // to utf8 file name
-        let path = decodeURI(url)
         // replace %20 to space
-        const filePath = '../files' + path.replace(/%20/g, ' ')
+        const filePath = '../files' + decodeURI(url).replace(/%20/g, ' ')
         console.log('File download path: ' + filePath)
 
         if (isFile(filePath)) {
